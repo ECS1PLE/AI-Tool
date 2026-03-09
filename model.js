@@ -1,13 +1,27 @@
-const API_KEY = `${API_KEY}`;
+process.loadEnvFile();
+
+const API_KEY = process.env.API_KEY;
 const url = 'https://openrouter.ai/api/v1/chat/completions';
 const prompt = require('prompt-sync')();
 
-let content = prompt('Введите текст для ИИ: ');
+if (!API_KEY) {
+  throw new Error('API_KEY не найден. Запусти файл через: node --env-file=.env model.js');
+}
+
+const content = prompt('Введите текст для ИИ: ');
 
 const requestBody = {
-  model: 'arcee-ai/trinity-large-preview:free',
+  model: 'qwen/qwen3-vl-235b-a22b-thinking',
   messages: [
-    { role: 'user', content: `${content}` }
+    {
+      role: 'user',
+      "content": [
+        {
+          type: "text",
+          text: `${content}`
+        }
+      ]
+    }
   ]
 };
 
@@ -21,9 +35,6 @@ fetch(url, {
   },
   body: JSON.stringify(requestBody)
 })
-.then(res => res.json())
-.then(data => {
-  const reply = data.choices[0].message.content;
-  console.log("Ответ ИИ:\n", reply);
-})
-.catch(err => console.error(err));
+  .then(res => res.json())
+  .then(data => console.log("Ответ Модели: \n", data.choices[0].message.content))
+  .catch(err => console.error(err))
