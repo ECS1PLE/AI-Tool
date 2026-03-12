@@ -72,10 +72,6 @@ export const Chat: React.FC = () => {
           {error && (
             <p className="text-xs text-red-500 dark:text-red-400">{error}</p>
           )}
-          <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-            Сообщения отправляются через серверный API, использующий OpenRouter.
-            Не отправляйте чувствительные данные.
-          </p>
         </section>
       </div>
     </div>
